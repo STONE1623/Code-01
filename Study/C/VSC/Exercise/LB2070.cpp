@@ -11,7 +11,14 @@ int main()
     cin>>n;
     for(int i=1;i<=n;i++)
     {
-        sum+=1.0*pow(-1.0,n+1)*1/n;
+        if(i%2!=0)
+        {
+            sum+=1.0*1/i;
+        }
+        else 
+        {
+            sum-=1.0*1/i;
+        }
     }
     cout<<fixed<<setprecision(4)<<sum;
 }
