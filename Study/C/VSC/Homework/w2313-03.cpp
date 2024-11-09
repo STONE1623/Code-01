@@ -34,5 +34,6 @@ int main()
         {
             cout<<a[y]<<" ";
         }
+        cout<<1;
     }
 }
