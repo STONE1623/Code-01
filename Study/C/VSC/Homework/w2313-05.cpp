@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 
-void c(double a[],double b[],int O,int M)
+void c(double a[],double b[],int I,int M)
 {
     /*int n1=sizeof(a[N])/sizeof(a[0]);
     int n2=sizeof(b[M])/sizeof(b[0]);*/
-    int n=O+M;
-    int n1=O;
+    int n=I+M;
+    int n1=I;
     int n2=M;
     const int N=n;
     double c[N];
@@ -16,9 +16,11 @@ void c(double a[],double b[],int O,int M)
     }
     for(int i=0;i<n2;i++)
     {
-        c[n1+1]=b[i];
+        c[n1+i]=b[i];
     }
-    for(int i=0;i<N-1;i++)
+    /*for(int i=0;i<N;i++) cout<<c[i]<<" ";
+    cout<<endl;*/
+    for(int i=0;i<N;i++)
     {
         int min1=c[i];int min2=c[i];int s=i;//min1:当前较小值；min2：上一个较小值
         for(int p=i+1;p<N;p++)
@@ -32,9 +34,9 @@ void c(double a[],double b[],int O,int M)
                 }
                 else
                 {
-                    min2=c[p];
                     s=p;
                 }
+                min2=min1;
             }
         }
         if(s!=i)
@@ -44,15 +46,16 @@ void c(double a[],double b[],int O,int M)
             c[i]=t;
         }
     }
-    for(int o=0;o<N;o++)
+    for(int o=0;o<N-1;o++)
     {
         cout<<c[o]<<" ";
     }
+    cout<<c[N-1]<<endl;
 }
 
 int main()
 {
-    void c(double,double,int,int);
+    void c(double [],double [],int,int);
     int n=0;int m=0;
     while(cin>>n>>m)
     {
@@ -62,12 +65,10 @@ int main()
         {
             cin>>a[i];
         }
-        for(int i=0;i<N;i++)
+        for(int i=0;i<M;i++)
         {
             cin>>b[i];
         }
-        c(a[N],b[M],N,M);
-
+        c(a,b,N,M);
     }
-
 }
