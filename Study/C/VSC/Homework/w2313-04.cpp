@@ -5,9 +5,10 @@ using namespace std;
 
 int main()
 {
-    string a;int num = 0;int x=0;
+    string a;int num = 0;
     while(cin>>a)
     {
+        int x=0;
         num=a.length();
         const int N=num;
         char b[N];
@@ -34,7 +35,7 @@ int main()
                 }
             }
         }
-        cout<<a<<endl;
+        //cout<<a<<endl;
         if(x==1) cout<<"不是回文数"<<endl;
         else cout<<"是回文数"<<endl;
         //for(int i=0;i<N;i++) cout<<b[i]<<" ";
