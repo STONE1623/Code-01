@@ -1,6 +1,6 @@
 #include <iostream>
 #include <climits>
-#include <unistd.h>
+
 using namespace std;
 
 int main()
@@ -18,18 +18,9 @@ int main()
                 c[h]=b[i];
                 h++;
             }
-            //cin>>b[i];
-            /*for(int q=0;q<21;q++)
-            {
-                if(b[i]==a[q])
-                {
-                    c[h]=b[i];
-                    h++;
-                }
-            }*/
+
         }
         int y=0;
-        sleep(0.2);
         if(h==1)cout<<c[0]<<endl;
         else 
         {
