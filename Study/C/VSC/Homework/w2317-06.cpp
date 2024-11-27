@@ -19,8 +19,8 @@ int main()
 
         for(int j=0;j<10;j++)
         {
-            matrix[i][j]=D4(x,y,i,j);cout<<matrix[i][j]<<" ";
-            if(matrix[i][j]<=d) sum+=(i+j)%2;
+            matrix[i][j]=D4(x,y,i,j);//cout<<matrix[i][j]<<" ";
+            if(matrix[i][j]<=d) sum+=(i+j)%2;cout<<sum<<endl;
         }
         cout<<endl;
 
