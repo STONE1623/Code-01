@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    int num=0;int arrn[5];
+    int num=0;int arrn[100];
     while(cin>>num)
     {
         int amount=0;int flag=0;int cnum=0;
