@@ -14,17 +14,15 @@ table *head=NULL;
 table *s,*p;
 void * create(int n) //建立单链表
 {
-    
-
-        s=new table;
-        for(int i=0;i<n;i++)
-        {
-            cin>>s->num>>s->age>>s->gender;
-            if(head==NULL) head=s;
-            else p->next=s;
-            p=s;
-            s=new table; 
-        }
+    s=new table;
+    for(int i=0;i<n;i++)
+    {
+        cin>>s->num>>s->age>>s->gender;
+        if(head==NULL) head=s;
+        else p->next=s;
+        p=s;
+        s=new table; 
+    }
     
     if(p!=NULL) p->next=NULL;
     //delete s;
@@ -56,7 +54,7 @@ void statistic(table *head,ostringstream &output)
 void dele(table *&head,int n)
 {
     table *s1=head,*p1;
-    for(int i=1;i<n&&s1!=NULL;i++)
+    for(int i=1;i<n-1&&s1!=NULL;i++)
     {
         s1=s1->next; //s1前驱
     }
@@ -78,11 +76,13 @@ void clear(table *&head)
 }
 int main()
 {
-    ostringstream output;
-    string stored;
+
+
     int n=0,m=0;
     while(cin>>n)
     {
+     ostringstream output;
+    //string stored;
     create(n);
     read(head,output);
     cin>>m;
@@ -94,5 +94,8 @@ int main()
     clear(head);
     string stored = output.str();
     cout<<stored;
+    
+    output.str("");
+    output.clear();
     }
 }
