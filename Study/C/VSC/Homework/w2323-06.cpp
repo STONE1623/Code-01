@@ -1,7 +1,18 @@
 #include <iostream>
 #include <string>
 using namespace std;
-
+string panduan(string str)
+{
+    return str;
+}
+string email(string str)
+{
+    return str;
+}
+string phone (string str)
+{
+    return str;
+}
 int main()
 {
     int num=0;
@@ -11,7 +22,9 @@ int main()
         {
             cin.ignore();
             string line;
-
+            panduan(line);
+            email(line);
+            phone (line);
             getline(cin,line);
             //cout<<line<<endl;
             int anum=0;
@@ -31,7 +44,7 @@ int main()
             if(anum!=0)
             {
                 string phone;
-                cout<<anum<<endl;
+                //cout<<anum<<endl;
                 if(anum==10)
                 {
                     int k=0;
@@ -41,25 +54,26 @@ int main()
                         if(line[k]=='0'||line[k]=='1'||line[k]=='2'||line[k]=='3'||line[k]=='4'||line[k]=='5'||line[k]=='6'||line[k]=='7'||line[k]=='8'||line[k]=='9')
                         {
                             phone+=line[k];
-                            cout<<phone<<" "<<k<<endl;
+                            //cout<<phone<<" "<<k<<endl;
                         }
                         if(phone.length()==3||phone.length()==7)
                         {
                             phone+='-';  
                         }
                     }
-                    cout<<phone<<endl;
-                    for(k=k-4;k>=0;k--)
+                    //cout<<k<<endl;
+                    //cout<<phone<<endl;
+                    for(k=phone.length()-5;k>=0;k--)
                     {
                         if(phone[k]!='-') phone[k]='*';
                     }
-                    cout<<phone;
+                    cout<<phone<<endl;
                 }
                 if(anum>10)
                 {
                     int k=0;
                     phone+='+';
-                    cout<<phone<<endl;
+                    //cout<<phone<<endl;
                     for(;k<=line.length();k++)
                     {
                         if(line[k]=='0'||line[k]=='1'||line[k]=='2'||line[k]=='3'||line[k]=='4'||line[k]=='5'||line[k]=='6'||line[k]=='7'||line[k]=='8'||line[k]=='9')
@@ -68,9 +82,10 @@ int main()
                         }//+*-***-***-1111
                         if(anum==11&(phone.length()==2||phone.length()==6||phone.length()==10)) phone+='-';
                         if(anum==12&(phone.length()==3||phone.length()==7||phone.length()==11)) phone+='-';
-                        cout<<phone<<endl;
+                        if(anum==13&(phone.length()==4||phone.length()==8||phone.length()==12)) phone+='-';
+                        //cout<<phone<<endl;
                     }
-                    cout<<phone<<endl;
+                    
                     for(k=0;k<phone.length()-5;k++)
                     {
                         if(phone[k]!='-'&&phone[k]!='+') phone[k]='*';
