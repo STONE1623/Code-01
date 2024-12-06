@@ -14,14 +14,13 @@ int main()
         {
             char ch;
             int x;
-            //map<int,int> mp;
+            
             vector<int> numbers;
             int amount=1;
             while(scanf("%d",&x)!=EOF&&getchar()!='\n')
             {
                 numbers.push_back(x);
                 amount++;
-                //mp[x]++;
             }
             for(int p=0;p<amount;p++)
             {
