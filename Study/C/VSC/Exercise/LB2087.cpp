@@ -4,11 +4,17 @@ using namespace std;
 
 int main()
 {
-    int n,i,m,sum;
-    string u;
+    int n;int m;int num=0;
     cin>>n;
-    for(int p=1;p<=n;p++)
+    int *arr=new int [n];
+    for(int i=0;i<n;i++)
     {
-        vector
+        cin>>arr[i];
     }
+    cin>>m;
+    for(int i=0;i<n;i++)
+    {
+        if(arr[i]==m) num+=1;
+    }
+    cout<<num<<endl;
 }
