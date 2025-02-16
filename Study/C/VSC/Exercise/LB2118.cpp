@@ -10,7 +10,8 @@ int main()
     int flag = s2.find(s1);
     if (flag != string::npos)
         cout << s1 << " is substring of " << s2 << endl;
-    else
+    else 
+    
     {
         int flag2 = s1.find(s2);
         if (flag2 == string::npos)

@@ -14,7 +14,7 @@ void initialize(vector<vector<char>>& maze,int m,int n)
     }
 }
 
-void mazeGenerator(vector<vector<char>>& maze,vector<int> sign,int x,int y,int m,int n)
+void mazeGenerator(vector<vector<char>>& maze,vector<int>& sign,int x,int y,int m,int n)
 {
     sign[(y-1)*n+x-1]=1;
     //判断四方向上是否有未访问的店
@@ -31,11 +31,24 @@ void mazeGenerator(vector<vector<char>>& maze,vector<int> sign,int x,int y,int m
         int nx, ny;
         nx=x+vx[rand()%4];
         ny=y+vy[rand()%4];
-        do{
-            nx=x+vx[rand()%4];
-            ny=y+vy[rand()%4];
-    
-        }while(flag1+flag2+flag3+flag4>0&&sign[(ny-1)*n+nx-1]==1);
+        while(1)
+        {
+            if(nx>=1&&nx<=n&&ny>=1&&ny<=m)
+            {
+                if(sign[(ny-1)*n+nx-1]==0) break;
+                else
+                {
+                    nx=x+vx[rand()%4];
+                    ny=y+vy[rand()%4];
+                }
+            }
+            else
+            {
+                nx=x+vx[rand()%4];
+                ny=y+vy[rand()%4];
+            }
+        }
+
         mazeGenerator(maze,sign,nx,ny,m,n);
         if(y>1) {if(sign[(y-2)*n+x-1]==0) flag1=1;} //上
         if(y<m) {if(sign[y*n+x-1]==0) flag2=1;} //下
