@@ -13,7 +13,8 @@ struct node* n2 = NULL;
 void cleanlist(node*& head);
 
 void clist(node*& head, string a, int len) {
-    struct node* s, * p;
+    struct node* s;
+    struct node* p;
     s = new node;
     
     if (len % 3 == 0) {
@@ -58,10 +59,10 @@ void clist(node*& head, string a, int len) {
 }
 
 void doplus(node*& n1, node*& n2, string& c) {
-    node* p1 = n1;
-    node* p2 = n2;
-    node* rh = NULL;
-    node* rt = NULL;
+    struct node* p1 = n1;
+    struct node* p2 = n2;
+    struct node* rh = NULL;
+    struct node* rt = NULL;
     int carry = 0;
 
     while (p1 != NULL || p2 != NULL || carry != 0) {
@@ -71,7 +72,7 @@ void doplus(node*& n1, node*& n2, string& c) {
         carry = sum / 1000;
         sum %= 1000;
 
-        node* temp = new node;
+        struct node* temp = new node;
         temp->num = sum;
         temp->next = NULL;
         if (!rh) rh = rt = temp;

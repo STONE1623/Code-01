@@ -2,13 +2,13 @@
 #include <string>
 using namespace std;
 
-
 struct node
 {
     int num;
     node *next;
 };
 void cleanlist(node*& head);
+void savetostring(node*& head,string& c);
 struct node *n1=NULL,*n2=NULL;
 
 void clist(node * & head,string a,int len)
@@ -77,35 +77,7 @@ void doplus(node * & n1,node * & n2,string& c)
             rt=temp;
         }
     }
-    c.clear();
-    node* prev=NULL;
-    node* curr=rh;
-    while(curr)
-    {
-        node* next=curr->next;
-        curr->next=prev;
-        prev=curr;
-        curr=next;
-    }
-
-    for(node* r= prev;r;r=r->next)
-    {
-        if(r!=prev){
-        if(r->num<10) c.push_back('0');
-        if(r->num<100) c.push_back('0');
-        }
-        c+=to_string(r->num);
-    }
-    cleanlist(rh);
-}
-void cleanlist(node* &head)
-{
-    while(head)
-    {
-        node* temp=head;
-        head=head->next;
-        delete temp;
-    }
+    savetostring(rh, c);
 }
 void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
 {
@@ -184,27 +156,40 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     }
     c.clear();
     if(neg) c.push_back('-');
-    node* prev=NULL;
-    node* curr=rh;
-    while(curr)
+    savetostring(rh, c);
+}
+void domul(node * & n1,node * & n2,string& c)
+void cleanlist(node* &head)
+{
+    while(head)
     {
-        node* next=curr->next;
-        curr->next=prev;
-        prev=curr;
-        curr=next;
+        node* temp=head;
+        head=head->next;
+        delete temp;
     }
-
-    for(node* r= prev;r;r=r->next)
-    {
-        if(r!=prev){
-        if(r->num<10) c.push_back('0');
-        if(r->num<100) c.push_back('0');
-        }
-        c+=to_string(r->num);
-    }
-    cleanlist(rh);
 }
 
+void savetostring(node* &head, string &c) {
+    // 反转链表
+    node* prev = nullptr;
+    node* curr = head;
+    while (curr) {
+        node* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    // 格式化为字符串
+    c.clear();
+    for(node* r = prev; r; r = r->next) {
+        if(r != prev) {
+            if(r->num < 10) c.push_back('0');
+            if(r->num < 100) c.push_back('0');
+        }
+        c += to_string(r->num);
+    }
+    cleanlist(head);
+}
 
 void readReverse(node* head)
 {
@@ -218,20 +203,20 @@ void readReverse(node* head)
 int main()
 {
     string a,b,c,d,a2,b2;
-    int a1,b1;//存放a,b的符号
+    
     //存放小数的位数
     while(cin>>a2>>b2)
     {
-    int a3=0,b3=0;
-    //判断正负，长度
-    //去除，号
+    int a1,b1;  //存放a,b的符号
+    int a3=0,b3=0;  //存放a,b的小数位数
+
+    //去除逗号，存进a,b中
     for(int i=0;i<a2.length();i++)
     {
         if(a2[i]!=','){
             a+=a2[i];
         }
     }
-    cout<<"a:"<<a<<endl;
     for(int i=0;i<b2.length();i++)
     {
         if(b2[i]!=','){
@@ -239,29 +224,31 @@ int main()
         }
     }
 
-    int len1=a.length(),len2=b.length();
+    //记录正负值
     if(a[0]!='-') a1=1;
     else a1=0;
     if(b[0]!='-') b1=1;
     else b1=0;
-    //查找小数点位置
-    for(int i=0;i<a.length();i++)
-    {
-        if(a[i]=='.') a3=a.length()-i-1;
+
+    //查找小数点位置并从a,b中去除
+    size_t pos = a.find('.');
+    if(pos != string::npos) {
+        a3 = a.length() - pos - 1;
+        a.erase(pos, 1);
     }
-    if(a3!=0) a.erase(a.length()-a3-1,1);
-    for(int i=0;i<b.length();i++)
-    {
-        if(b[i]=='.') b3=b.length()-i-1;
+    size_t pos2 = b.find('.');
+    if(pos2 != string::npos) {
+        b3 = b.length() - pos2 - 1;
+        b.erase(pos2,1);
     }
-    if(b3!=0) b.erase(b.length()-b3-1,1);
+
+    //在a,b后补零
     if(a3>b3) b.append(a3-b3,'0');
     if(b3>a3) a.append(b3-a3,'0');
     int dot=0;
     dot=a3>b3?a3:b3;
-    cout<<"a3: "<<a3<<"   "<<"b3: "<<b3<<endl;
-    cout<<"a: "<<a<<"   "<<"b: "<<b<<endl;
 
+    //去除正负号
     if(a[0]=='-'||a[0]=='+')
     {
         len1--;
@@ -271,14 +258,13 @@ int main()
     {   len2--;
         b=b.substr(1);
     }
-    cout<<"去符号"<<endl<<"a3: "<<a3<<"   "<<"b3: "<<b3<<endl;
-    cout<<"a: "<<a<<"   "<<"b: "<<b<<endl;
-    len1=a.length(),len2=b.length();
+
+    //转化为链表
+    int len1=a.length(),len2=b.length();
     clist(n1,a,len1);
     clist(n2,b,len2);
-    cout<<"转链表"<<endl;
-    readReverse(n1);cout<<endl;
-    readReverse(n2);cout<<endl;
+
+    //根据符号分类进行运算
     if(a1==1&&b1==1||a1==0&&b1==0)
     {
         if(a1==0&&b1==0) c.push_back('-');
@@ -293,6 +279,8 @@ int main()
         dominus(n1,n2,c,len1,len2);
         if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
     }
+
+    //给整数部分添加逗号
     if(dot==0)
     {
         for(int i=c.length()-1;i>=0;i--)
