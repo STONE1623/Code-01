@@ -104,10 +104,59 @@ void doplus(node * & n1,node * & n2,string& c)
         delete temp;
     }
 }
-void dominus(node * & n1,node * & n2,string& c)
+void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
 {
-    node* p1=n1;
-    node* p2=n2;
+    bool neg=false;
+    node* t1=n1;
+    node* t2=n2;
+    if(len1<len2) neg=true;
+    else if(len1==len2){
+    // 位数相同时，需要从高位（链表尾）开始比较
+    
+    node *last1 = NULL, *last2 = NULL;
+    
+    // 找到两个链表的最后一个节点（最高位）
+    while(t1) {
+        last1 = t1;
+        t1 = t1->next;
+    }
+    while(t2) {
+        last2 = t2;
+        t2 = t2->next;
+    }
+    
+    // 从高位向低位比较
+    t1 = n1;
+    t2 = n2;
+    while(last1 && last2) {
+        if(last1->num < last2->num) {
+            neg = true;
+            break;
+        }
+        else if(last1->num > last2->num) {
+            break;
+        }
+        // 找到当前最高位的前一位
+        node *prev1 = NULL, *prev2 = NULL;
+        t1 = n1;
+        t2 = n2;
+        while(t1 != last1) {
+            prev1 = t1;
+            t1 = t1->next;
+        }
+        while(t2 != last2) {
+            prev2 = t2;
+            t2 = t2->next;
+        }
+        last1 = prev1;
+        last2 = prev2;
+    }
+    }
+
+// 根据比较结果选择减法顺序
+    node* p1 = neg ? n2 : n1;  // 被减数取较大值
+    node* p2 = neg ? n1 : n2;  // 减数取较小值
+        
     node* rh=NULL;
     node* rt=NULL;
     int carry=0;
@@ -131,6 +180,7 @@ void dominus(node * & n1,node * & n2,string& c)
         }
     }
     c.clear();
+    if(neg) c.push_back('-');
     node* prev=NULL;
     node* curr=rh;
     while(curr)
@@ -141,7 +191,6 @@ void dominus(node * & n1,node * & n2,string& c)
         curr=next;
         
     }
-
 
     for(node* r= prev;r;r=r->next)
     {
@@ -159,21 +208,6 @@ void dominus(node * & n1,node * & n2,string& c)
         delete temp;
     }
 }
-/*void read(node *head,node * & p,node * & q)
-{
-    if(p->next!=NULL)
-    {
-        int a=p->num;
-        q=p;
-        p=p->next;
-        read(head,p,q);
-        cout<<a<<" ^";
-    }
-    if(p->next==NULL)
-    {
-        cout<<p->num<<" & ";
-    }
-}*/
 
 
 void readReverse(node* head)
@@ -188,10 +222,16 @@ void readReverse(node* head)
 int main()
 {
     string a,b,c,d;
+    int a1,b1;//存放a,b的符号
     while(cin>>a>>b)
     {
     //判断正负，长度
     int len1=a.length(),len2=b.length();
+    if(a[0]!='-') a1=1;
+    else a1=0;
+    if(b[0]=='+'||b[0]!='+'&&b[0]!='-') b1=1;
+    else b1=0;
+
     if(a[0]=='-'||a[0]=='+')
     {
         len1--;
@@ -219,16 +259,28 @@ int main()
     /*struct node *p,*q;
     p=n1;q=n1;
     read(n1,p,q);*/
-    cout<<"len1:"<<len1<<endl;
+    /*cout<<"len1:"<<len1<<endl;
     cout<<"len2:"<<len2<<endl;
     cout<<"n1:";
     readReverse(n1);
     cout<<endl<<"n2:";
     readReverse(n2);
     cout<<endl;
-    if(a[0]=='+'&&b[0]=='+'||a[0]=='-'&&b[0]=='-'||a[0]!='-'&&a[0]!='+'&&b[0]=='+')
+    cout<<"a1:"<<a1<<endl;
+    cout<<"b1:"<<b1<<endl;
+    */
+    if(a1==1&&b1==1||a1==0&&b1==0)
     {
+        if(a1==0&&b1==0) c.push_back('-');
         doplus(n1,n2,c);
+        cout<<c<<endl;
+    }
+    if(a1==1&&b1==0||a1==0&&b1==1)
+    {
+        if(a1==0&&b1==1)
+        dominus(n2,n1,c,len2,len1);
+        else
+        dominus(n1,n2,c,len1,len2);
         cout<<c<<endl;
     }
     while(n1)
