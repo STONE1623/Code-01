@@ -84,12 +84,11 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     bool neg=false;
     node* t1=n1;
     node* t2=n2;
+    //比较大小
     if(len1<len2) neg=true;
     else if(len1==len2){
     // 位数相同时，需要从高位（链表尾）开始比较
-    
     node *last1 = NULL, *last2 = NULL;
-    
     // 找到两个链表的最后一个节点（最高位）
     while(t1) {
         last1 = t1;
@@ -158,7 +157,66 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     if(neg) c.push_back('-');
     savetostring(rh, c);
 }
-void domul(node * & n1,node * & n2,string& c)
+void domul(node* & n1, node* & n2, string& c,int len1,int len2) 
+{
+    // 创建两个链表的索引数组
+    int len3=len1+len2;
+    node** index1 = new node*[len1/3+bool(len1%3)];
+    node** index2 = new node*[len2/3+bool(len2%3)];
+    node** index3 = new node*[len3/3+bool(len3%3)];
+    
+    // 填充索引数组
+    node* p = n1;
+    for(int i = 0; i < len1/3+bool(len1%3); i++) {
+        index1[i] = p;
+        p = p->next;
+    }
+    p = n2;
+    for(int i = 0; i < len2/3+bool(len2%3); i++) {
+        index2[i] = p;
+        p = p->next;
+    }
+    
+    // 创建结果链表
+   /* node* rh = nullptr;
+    node* rt = nullptr;*/
+    node* r = nullptr;
+    node*s=nullptr,*t=nullptr;
+    for(int i=0;i<len3/3+bool(len3%3);i++)
+    {
+        s=new node;
+        s->num=0;s->next=nullptr;
+        if(r==NULL) r=s;
+        else t->next=s;
+        t=s;
+        index3[i]=s;
+    }
+    
+    for(int i=0;i<len1/3+bool(len1%3);i++)
+    {
+        for(int j=0;j<len2/3+bool(len2%3);j++)
+        {
+            index3[i+j]->num+=index1[i]->num*index2[j]->num;
+            index3[i+j+1]->num+=index3[i+j]->num/1000;
+            index3[i+j]->num%=1000;
+        }
+    }
+    if(index3[len3/3+bool(len3%3)-1]->num==0)
+    {
+        node* temp=index3[len3/3+bool(len3%3)-1];
+        index3[len3/3+bool(len3%3)-2]->next=nullptr;
+        delete temp;
+    }
+    
+    
+    // 清理索引数组
+    delete[] index1;
+    delete[] index2;
+    delete[] index3;
+    
+    // 保存结果到字符串
+    savetostring(r, c);
+}
 void cleanlist(node* &head)
 {
     while(head)
@@ -223,14 +281,19 @@ int main()
             b+=b2[i];
         }
     }
-
+    int flag=0;
+    if(b[0]=='*')
+    {
+        b=b.substr(1);
+        flag=1;
+    }
     //记录正负值
     if(a[0]!='-') a1=1;
     else a1=0;
     if(b[0]!='-') b1=1;
     else b1=0;
 
-    //查找小数点位置并从a,b中去除
+    //查找、记录小数点位置并从a,b中去除
     size_t pos = a.find('.');
     if(pos != string::npos) {
         a3 = a.length() - pos - 1;
@@ -243,12 +306,17 @@ int main()
     }
 
     //在a,b后补零
+    
+    int dot=0;
+    if(flag==0){
     if(a3>b3) b.append(a3-b3,'0');
     if(b3>a3) a.append(b3-a3,'0');
-    int dot=0;
     dot=a3>b3?a3:b3;
-
+    }
+    else dot=a3+b3;
+    
     //去除正负号
+    int len1=a.length(),len2=b.length();
     if(a[0]=='-'||a[0]=='+')
     {
         len1--;
@@ -260,11 +328,11 @@ int main()
     }
 
     //转化为链表
-    int len1=a.length(),len2=b.length();
     clist(n1,a,len1);
     clist(n2,b,len2);
 
     //根据符号分类进行运算
+    if(flag==0){
     if(a1==1&&b1==1||a1==0&&b1==0)
     {
         if(a1==0&&b1==0) c.push_back('-');
@@ -278,6 +346,14 @@ int main()
         else
         dominus(n1,n2,c,len1,len2);
         if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
+    }
+    }
+    else
+    {
+        if(a1==1&&b1==0||a1==0&&b1==1) c.push_back('-');
+        domul(n1,n2,c,len1,len2);
+        if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
+        cout<<c<<endl;
     }
 
     //给整数部分添加逗号
