@@ -130,7 +130,8 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     // 根据比较结果选择减法顺序
     node* p1 = neg ? n2 : n1;  // 被减数取较大值
     node* p2 = neg ? n1 : n2;  // 减数取较小值
-        
+    cout<<neg<<endl;
+
     node* rh=NULL;
     node* rt=NULL;
     int carry=0;
@@ -153,14 +154,15 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
             rt=temp;
         }
     }
-    c.clear();
-    if(neg) c.push_back('-');
+    
+    if(neg) c+='-';
     savetostring(rh, c);
 }
 void domul(node* & n1, node* & n2, string& c,int len1,int len2) 
 {
     // 创建两个链表的索引数组
     int len3=len1+len2;
+    
     node** index1 = new node*[len1/3+bool(len1%3)];
     node** index2 = new node*[len2/3+bool(len2%3)];
     node** index3 = new node*[len3/3+bool(len3%3)];
@@ -197,7 +199,7 @@ void domul(node* & n1, node* & n2, string& c,int len1,int len2)
         for(int j=0;j<len2/3+bool(len2%3);j++)
         {
             index3[i+j]->num+=index1[i]->num*index2[j]->num;
-            index3[i+j+1]->num+=index3[i+j]->num/1000;
+            if(i+j<len3/3+bool(len3%3)-1) index3[i+j+1]->num+=index3[i+j]->num/1000;
             index3[i+j]->num%=1000;
         }
     }
@@ -238,7 +240,7 @@ void savetostring(node* &head, string &c) {
         curr = next;
     }
     // 格式化为字符串
-    c.clear();
+    //c.clear();
     for(node* r = prev; r; r = r->next) {
         if(r != prev) {
             if(r->num < 10) c.push_back('0');
@@ -331,11 +333,12 @@ int main()
     clist(n1,a,len1);
     clist(n2,b,len2);
 
+    cout<<"flag: "<<flag<<" a1: "<<a1<<" b1: "<<b1<<endl;
     //根据符号分类进行运算
     if(flag==0){
     if(a1==1&&b1==1||a1==0&&b1==0)
     {
-        if(a1==0&&b1==0) c.push_back('-');
+        if(a1==0&&b1==0) c+='-';
         doplus(n1,n2,c);
         if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
     }
@@ -353,10 +356,9 @@ int main()
         if(a1==1&&b1==0||a1==0&&b1==1) c.push_back('-');
         domul(n1,n2,c,len1,len2);
         if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
-        cout<<c<<endl;
     }
 
-    //给整数部分添加逗号
+    //给整数部分添加逗号并删除小数部分末尾多余的0
     if(dot==0)
     {
         for(int i=c.length()-1;i>=0;i--)
@@ -375,12 +377,20 @@ int main()
         {
             if((i-j)%3==0&&j!=0) c.insert(j,",");;
         }
+        for(int j=c.length()-1;j>i;j--)
+        {
+            if(c[j]=='0') c.pop_back();
+            else break;
+        }
     }
+
+    
     cout<<c<<endl;
     cleanlist(n1);
     cleanlist(n2);
     a.clear();
     b.clear();
+    c.clear();
     }
 
 }
