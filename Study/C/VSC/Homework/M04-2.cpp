@@ -9,6 +9,7 @@ struct node
 };
 void cleanlist(node*& head);
 void savetostring(node*& head,string& c);
+bool compare(node** ,node** ,int,int);
 struct node *n1=NULL,*n2=NULL;
 
 void clist(node * & head,string a,int len)
@@ -87,7 +88,7 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     //比较大小
     if(len1<len2) neg=true;
     else if(len1==len2){
-    // 位数相同时，需要从高位（链表尾）开始比较
+    // 位数相同时，需要从高位（表链尾）开始较比
     node *last1 = NULL, *last2 = NULL;
     // 找到两个链表的最后一个节点（最高位）
     while(t1) {
@@ -159,7 +160,8 @@ void dominus(node * & n1,node * & n2,string& c,int len1,int len2)
     savetostring(rh, c);
 }
 void domul(node* & n1, node* & n2, string& c,int len1,int len2) 
-{
+{  
+
     // 创建两个链表的索引数组
     int len3=len1+len2;
     
@@ -219,6 +221,76 @@ void domul(node* & n1, node* & n2, string& c,int len1,int len2)
     // 保存结果到字符串
     savetostring(r, c);
 }
+void dodiv(node* &n1, node* &n2, string& c, string& f, string b,int len1, int len2) 
+{
+    node** index1 = new node*[len1/3 + bool(len1%3)];
+    node** index2 = new node*[len2/3+bool(len2%3)];
+    node* p=n1;
+    for(int i=0;i<len1/3+bool(len1%3);i++)
+    {
+        index1[i]=p;
+        p=p->next;
+    }
+    int len3=len1-len2;
+    if(len1<len2)
+    {
+        c='0';
+        savetostring(n1,f);
+    }
+    else
+    {
+        int nlen2=len2,nlen1=len1;
+        for(int i=len3;i>=0;i--)
+        {
+            string b4=b;
+            b4.append(i,'0');
+            cleanlist(n2);
+            nlen2=b4.length();
+            clist(n2,b4,len2);
+            delete[] index2;
+            index2 = new node*[nlen2/3 + bool(nlen2%3)];
+            p=n2;
+            for(int j=0;j<nlen2/3+bool(nlen2%3);j++)
+            {
+                index2[j]=p;
+                p=p->next;
+            }
+            while(compare(index1,index2,len1,nlen2))
+            {
+                c[i]+=;
+                int carry=0;
+                for(int j=0;j<len1/3+bool(len1%3);j++)
+                {
+                    int sum=carry;
+                    sum=(index1[j]->num-index2[j]->num);
+                    carry=(sum + 1000)/1000 - 1;
+                    sum+=1000;
+                    sum%=1000;
+                }
+                savetostring(n1,f);
+            }
+            nlen1--;  
+        }
+    }
+    delete[] index1;
+    delete[] index2;
+    
+
+}
+
+bool compare(node** index1, node** index2, int len1, int len2) {
+    // 从高位开始比较
+    for(int i = len1/3 + bool(len1%3) - 1; i >= 0; i--) {
+        if(index1[i]->num < index2[i]->num) {
+            return false;
+        }
+        else if(index1[i]->num > index2[i]->num) {
+            return true;
+        }
+    }
+    // 所有位都相等的情况
+    return false;  // 或者根据业务需求返回true
+}
 void cleanlist(node* &head)
 {
     while(head)
@@ -262,7 +334,7 @@ void readReverse(node* head)
 
 int main()
 {
-    string a,b,c,d,a2,b2;
+    string a,b,c,d,f,a2,b2;
     
     //存放小数的位数
     while(cin>>a2>>b2)
@@ -283,11 +355,16 @@ int main()
             b+=b2[i];
         }
     }
-    int flag=0;
+    bool ismul=0,isdiv=0;
     if(b[0]=='*')
     {
         b=b.substr(1);
-        flag=1;
+        ismul=1;
+    }
+    if(b[0]=='/')
+    {
+        b=b.substr(1);
+        isdiv=1;
     }
     //记录正负值
     if(a[0]!='-') a1=1;
@@ -310,7 +387,7 @@ int main()
     //在a,b后补零
     
     int dot=0;
-    if(flag==0){
+    if(ismul==0&&isdiv==0){
     if(a3>b3) b.append(a3-b3,'0');
     if(b3>a3) a.append(b3-a3,'0');
     dot=a3>b3?a3:b3;
@@ -333,9 +410,9 @@ int main()
     clist(n1,a,len1);
     clist(n2,b,len2);
 
-    cout<<"flag: "<<flag<<" a1: "<<a1<<" b1: "<<b1<<endl;
+    cout<<"ismul: "<<ismul<<" a1: "<<a1<<" b1: "<<b1<<endl;
     //根据符号分类进行运算
-    if(flag==0){
+    if(ismul==0&&isdiv==0){
     if(a1==1&&b1==1||a1==0&&b1==0)
     {
         if(a1==0&&b1==0) c+='-';
@@ -353,9 +430,17 @@ int main()
     }
     else
     {
-        if(a1==1&&b1==0||a1==0&&b1==1) c.push_back('-');
-        domul(n1,n2,c,len1,len2);
-        if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
+        if(ismul==1)
+        {
+            if(a1==1&&b1==0||a1==0&&b1==1) c.push_back('-');
+            domul(n1,n2,c,len1,len2);
+            if(a3!=0||b3!=0) c.insert(c.length()-dot,".");
+        }
+        else
+        {
+            if(a1==1&&b1==0||a1==0&&b1==1) c.push_back('-');
+            dodiv(n1,n2,c,f,b,len1,len2);
+        }
     }
 
     //给整数部分添加逗号并删除小数部分末尾多余的0
@@ -385,7 +470,12 @@ int main()
     }
 
     
-    cout<<c<<endl;
+    if(isdiv!=1) cout<<c<<endl;
+    if(isdiv==1)
+    {
+        cout<<c<<"~~~"<<f<<endl;
+        f.clear();
+    }
     cleanlist(n1);
     cleanlist(n2);
     a.clear();

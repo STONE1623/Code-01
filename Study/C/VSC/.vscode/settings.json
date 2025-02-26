@@ -70,7 +70,15 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+
+        "[cpp]": {
+            "editor.defaultFormatter": "xaver.clang-format",
+            "editor.formatOnSave": true,
+            "editor.formatOnType": true
+        }
     },
     "C_Cpp.errorSquiggles": "disabled"
+
 }
+
