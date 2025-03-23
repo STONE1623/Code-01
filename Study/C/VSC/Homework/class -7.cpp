@@ -41,7 +41,7 @@ void  SelectSort(Student *st, int n)  //选择排序
 }
 
 istream & operator>>(istream & cin,Student & e)
-{d'd
+{
     cin>>e.num>>e.name>>e.sex>>e.eng>>e.chi>>e.mat;
     e.sum=e.eng+e.chi+e.mat;
     return cin;
