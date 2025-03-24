@@ -17,15 +17,15 @@ public:
     int sum;
     static double getAvgEn()
     {
-        return Student ::En*1.0/5;
+        return 1.0*Student ::En/10;
     }
-    static int getAvgCh()
+    static float getAvgCh()
     {
-        return 1.0*Student ::Ch/5;
+        return 1.0*Student ::Ch/10;
     }
-    static int getAvgMath()
+    static float getAvgMath()
     {
-        return 1.0*Student ::Math/5;
+        return 1.0*Student ::Math/10;
     }
     bool operator>(Student &e) {
         if (sum > e.sum) 
@@ -38,34 +38,42 @@ int Student::Ch=0;int Student::En=0;int Student::Math=0;
 
 class ScienceStudent:public Student
 {
+protected:
+    static int Phy;
+    static int Che;
+    static int Bio;
 public:
     int phy;
     int che;
     int bio;
-    static int get_average()
+    static void get_average()
     {
-        return 1.0*ScienceStudent ::Sum/5;
+        cout << "The average of physics:" << 1.0*ScienceStudent::Phy/5 
+        << "\tchemistry:" << 1.0*ScienceStudent::Che/5
+        << "\tbiology:" << 1.0*ScienceStudent::Bio/5 << endl;
     }
     friend istream & operator>>(istream & cin,ScienceStudent & e);
-protected:
-    static int Sum;
 };
-int ScienceStudent::Sum=0;
+int ScienceStudent::Phy=0;int ScienceStudent::Che=0;int ScienceStudent::Bio=0;
 class LiberalArtsStudent:public Student
 {
+protected:
+    static int His;
+    static int Geo;
+    static int Pol;
 public:
     int his;
     int geo;
     int pol;
-    static int get_average()
+    static void get_average()
     {
-        return 1.0*LiberalArtsStudent ::Sum/5;
+        cout << "The average of history:" << 1.0*LiberalArtsStudent::His/5 
+        << "\tgeography:" << 1.0*LiberalArtsStudent::Geo/5
+        << "\tpolitics:" << 1.0*LiberalArtsStudent::Pol/5 << endl;
     }
     friend istream & operator>>(istream & cin,LiberalArtsStudent & e);
-protected:
-    static int Sum;
 };
-int LiberalArtsStudent::Sum=0;
+int LiberalArtsStudent::His=0;int LiberalArtsStudent::Geo=0;int LiberalArtsStudent::Pol=0;
 ostream & operator<<(ostream & cout,ScienceStudent & e)
 {
     cout<<e.num<<"\t"<<e.name<<"\t"<<e.sex<<"\t"<<e.eng<<"\t"<<e.chi<<"\t"<<e.mat<<"\t"<<e.phy<<"\t"<<e.che<<"\t"<<e.bio<<"\t"<<e.sum<<endl;
@@ -81,7 +89,7 @@ istream & operator>>(istream & cin,ScienceStudent & e)
     cin>>e.num>>e.name>>e.sex>>e.eng>>e.chi>>e.mat>>e.phy>>e.che>>e.bio;
     e.sum=e.eng+e.chi+e.mat+e.phy+e.che+e.bio;
     Student::Ch+=e.chi;Student::En+=e.eng;Student::Math+=e.mat;
-    ScienceStudent::Sum+=e.sum;
+    ScienceStudent::Phy+=e.phy;ScienceStudent::Che+=e.che;ScienceStudent::Bio+=e.bio;
     return cin;
 }
 istream & operator>>(istream & cin,LiberalArtsStudent & e)
@@ -89,7 +97,7 @@ istream & operator>>(istream & cin,LiberalArtsStudent & e)
     cin>>e.num>>e.name>>e.sex>>e.eng>>e.chi>>e.mat>>e.his>>e.geo>>e.pol;
     e.sum=e.eng+e.chi+e.mat+e.his+e.geo+e.pol;
     Student::Ch+=e.chi;Student::En+=e.eng;Student::Math+=e.mat;
-    LiberalArtsStudent::Sum+=e.sum;
+    LiberalArtsStudent::His+=e.his;LiberalArtsStudent::Geo+=e.geo;LiberalArtsStudent::Pol+=e.pol;
     return cin;
 }
 int main() {
